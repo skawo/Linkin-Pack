@@ -432,7 +432,8 @@ namespace OoT_Link_Animation_Editor
             SaveFileDialog sf = new SaveFileDialog
             {
                 AddExtension = true,
-                DefaultExt = "z64"
+                DefaultExt = "z64",
+                FileName = "OoT-edited"
             };
 
             DialogResult DR = sf.ShowDialog();
