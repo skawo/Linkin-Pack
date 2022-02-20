@@ -75,44 +75,47 @@ namespace OoT_Link_Animation_Editor
             // openROMToolStripMenuItem
             // 
             this.openROMToolStripMenuItem.Name = "openROMToolStripMenuItem";
-            this.openROMToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.openROMToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openROMToolStripMenuItem.Text = "Open ROM";
             this.openROMToolStripMenuItem.Click += new System.EventHandler(this.openROMToolStripMenuItem_Click);
             // 
             // openZZRPToolStripMenuItem
             // 
             this.openZZRPToolStripMenuItem.Name = "openZZRPToolStripMenuItem";
-            this.openZZRPToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.openZZRPToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openZZRPToolStripMenuItem.Text = "Open ZZRP";
+            this.openZZRPToolStripMenuItem.Click += new System.EventHandler(this.openZZRPToolStripMenuItem_Click);
             // 
             // openZZRPLToolStripMenuItem
             // 
             this.openZZRPLToolStripMenuItem.Name = "openZZRPLToolStripMenuItem";
-            this.openZZRPLToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.openZZRPLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openZZRPLToolStripMenuItem.Text = "Open ZZRPL";
+            this.openZZRPLToolStripMenuItem.Click += new System.EventHandler(this.openZZRPLToolStripMenuItem_Click);
             // 
             // openIndividualToolStripMenuItem
             // 
             this.openIndividualToolStripMenuItem.Name = "openIndividualToolStripMenuItem";
-            this.openIndividualToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.openIndividualToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openIndividualToolStripMenuItem.Text = "Open individual";
+            this.openIndividualToolStripMenuItem.Click += new System.EventHandler(this.openIndividualToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToolStripMenuItem.Text = "Save";
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveAsToolStripMenuItem.Text = "Save As...";
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // aboutToolStripMenuItem

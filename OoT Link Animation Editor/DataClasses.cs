@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,7 @@ namespace OoT_Link_Animation_Editor
 
     public class AnimationHeader
     {
-        public UInt16 gKOffs { get; set; }
+        public UInt16 GameplayKeepOffset { get; set; }
         public UInt16 FrameCount { get; set; }
         public UInt16 Padding { get; set; }
         public byte Segment { get; set; }
@@ -47,7 +48,7 @@ namespace OoT_Link_Animation_Editor
         {
             byte[] Bytes = gameplay_keep.Skip(gameplayKeepOffset).Take(8).ToArray();
 
-            gKOffs = gameplayKeepOffset;
+            GameplayKeepOffset = gameplayKeepOffset;
             FrameCount = Program.BEConverter.ToUInt16(Bytes, 0);
             Padding = Program.BEConverter.ToUInt16(Bytes, 2);
             Segment = Bytes[4];
@@ -55,6 +56,33 @@ namespace OoT_Link_Animation_Editor
             OffsB = Bytes[6];
             OffsC = Bytes[7];
         }
+
+        public AnimationHeader(UInt16 _GameplayKeepOffset, UInt16 _FrameCount, byte _Segment, UInt32 _Offset)
+        {
+            this.GameplayKeepOffset = _GameplayKeepOffset;
+            FrameCount = _FrameCount;
+            Segment = _Segment;
+            Offset = _Offset;
+        }
+    }
+
+    public class LinkAnimetionFile
+    {
+        public List<Animation> Animations {get; set;}
+
+        public LinkAnimetionFile(List<AnimationHeader> AnimHeaders, byte[] link_animetion)
+        {
+            ConcurrentBag<Animation> anims = new ConcurrentBag<Animation>();
+
+            Parallel.ForEach(AnimHeaders, aH =>
+            {
+                Animation An = new Animation(aH, link_animetion);
+                anims.Add(An);
+            });
+
+            Animations = anims.ToList();
+        }
+
     }
 
     public class Animation
@@ -64,9 +92,9 @@ namespace OoT_Link_Animation_Editor
 
         public Animation(AnimationHeader aH, byte[] link_animetion)
         {
-            gKOffs = aH.gKOffs;
+            gKOffs = aH.GameplayKeepOffset;
 
-            byte[] Bytes = link_animetion.Skip(aH.gKOffs).Take(132 * aH.FrameCount).ToArray();
+            byte[] Bytes = link_animetion.Skip(aH.GameplayKeepOffset).Take(132 * aH.FrameCount).ToArray();
 
             Frames = new List<AnimationFrame>();
 

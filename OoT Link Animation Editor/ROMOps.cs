@@ -8,7 +8,7 @@ using GameFormatReader.Common;
 
 namespace OoT_Link_Animation_Editor
 {
-    public static class FileOps
+    public static class ROMOps
     {
 
         public static Enums.ROMVer CheckRomVersion(byte[] ROMData)
