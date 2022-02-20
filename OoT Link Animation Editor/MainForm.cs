@@ -62,6 +62,7 @@ namespace OoT_Link_Animation_Editor
                         LinkAnimetionFilePath = "";
                         GameplayKeepFilePath = "";
                         saveAsToolStripMenuItem.Visible = true;
+                        Status.Visible = true;
 
                     }
                 }
@@ -186,7 +187,8 @@ namespace OoT_Link_Animation_Editor
                     {
                         GetAnimations();
                         InsertDataToAnimGrid();
-                        OperationMode = Enums.Mode.ZZRP;
+                        OperationMode = Enums.Mode.ZZRT;
+                        Status.Visible = false;
                     }
                 }
                 catch (Exception ex)
@@ -264,10 +266,8 @@ namespace OoT_Link_Animation_Editor
                         ROMFilePath = "";
                         saveAsToolStripMenuItem.Visible = false;
                         GameplayKeepFilePath = "";
+                        Status.Visible = false;
                     }
-
-
-
                 }
                 catch (Exception ex)
                 {
@@ -332,7 +332,7 @@ namespace OoT_Link_Animation_Editor
 
                             break;
                         }
-                    case Enums.Mode.ZZRP:
+                    case Enums.Mode.ZZRT:
                     case Enums.Mode.Direct:
                         {
                             Array.Copy(NewData[0], 0, GameplayKeepData, Dicts.OffsetsData.FirstAnimationEntry, NewData[0].Length);
@@ -388,7 +388,7 @@ namespace OoT_Link_Animation_Editor
                 int NewFrameCount = anm.Frames.Count;
                 int FramesFree = AnimationOps.CalculateFramesLeft(LinkAnimetion, LinkAnimetionDataEntry);
 
-                if (FramesFree - (NewFrameCount - OldFrameCount) < 0)
+                if (OperationMode != Enums.Mode.ZZRT && (FramesFree - (NewFrameCount - OldFrameCount) < 0))
                 {
                     MessageBox.Show("The framecount treshhold would be exceeded, and so the animation cannot be imported.");
                     return;

@@ -24,7 +24,7 @@ namespace OoT_Link_Animation_Editor
         public enum Mode
         {
             ROM = 0,
-            ZZRP = 1,
+            ZZRT = 1,
             ZZRPL = 2,
             Direct = 3,
             None = 255,
