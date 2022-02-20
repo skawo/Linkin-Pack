@@ -83,7 +83,7 @@ namespace OoT_Link_Animation_Editor
             Animations = anims.OrderBy(x => x.GameplayKeepOffset).ToList();
         }
 
-        public byte[][] GetByteData(DMADataEntry? LinkAnimationDMA)
+        public byte[][] GetByteData(DMADataEntry? LinkAnimationDMA, Enums.Mode OperationMode)
         {
             List<byte> Headers = new List<byte>();
             List<byte> AnimationData = new List<byte>();
@@ -128,7 +128,10 @@ namespace OoT_Link_Animation_Editor
             if (LinkAnimationDMA != null)
                 Size = (int)(((DMADataEntry)LinkAnimationDMA).VROMEnd - ((DMADataEntry)LinkAnimationDMA).VROMStart);
 
-            Helpers.PadUntilSize(AnimationData, Size);
+            if (OperationMode == Enums.Mode.ZZRT)
+                Helpers.Ensure16ByteAlign(AnimationData);
+            else
+                Helpers.PadUntilSize(AnimationData, Size);
 
             return new byte[][] { Headers.ToArray(), AnimationData.ToArray() };
         }

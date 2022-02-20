@@ -19,6 +19,11 @@ namespace OoT_Link_Animation_Editor
             while (ByteList.Count % 4 != 0)
                 ByteList.Add(0);
         }
+        public static void Ensure16ByteAlign(List<byte> ByteList)
+        {
+            while (ByteList.Count % 4 != 0)
+                ByteList.Add(0);
+        }
 
         public static void PadUntilSize(List<byte> ByteList, int SizeBytes)
         {
