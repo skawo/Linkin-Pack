@@ -17,7 +17,7 @@ namespace OoT_Link_Animation_Editor
 
             byte[] Buffer = new byte[8];
 
-            foreach (var Pair in Dicts.BuildAddresses)
+            foreach (var Pair in Dicts.OffsetsData.BuildAddresses)
             {
                 try
                 {
@@ -27,8 +27,8 @@ namespace OoT_Link_Animation_Editor
                     string Date = Encoding.ASCII.GetString(Buffer);
 
 
-                    if (Dicts.BuildDates.ContainsValue(Date))
-                        return Dicts.BuildDates.FirstOrDefault(x => x.Value == Date).Key;
+                    if (Dicts.OffsetsData.BuildDates.ContainsValue(Date))
+                        return Dicts.OffsetsData.BuildDates.FirstOrDefault(x => x.Value == Date).Key;
                 }
                 catch (Exception)
                 {
@@ -39,16 +39,16 @@ namespace OoT_Link_Animation_Editor
             return Enums.ROMVer.Unknown;
         }
 
-        public static DMADataEntry GetDMADataEntry(byte[] ROMData, Enums.ROMVer ROMVersion, UInt32 FileNum)
+        public static DMADataEntry? GetDMADataEntry(byte[] ROMData, Enums.ROMVer ROMVersion, UInt32 FileNum)
         {
             EndianBinaryReader reader = new EndianBinaryReader(ROMData, Endian.Big);
             DMADataEntry Out = new DMADataEntry();
 
-            if (Dicts.DMAData.ContainsKey(ROMVersion))
+            if (Dicts.OffsetsData.DMAData.ContainsKey(ROMVersion))
             {
                 try
                 {
-                    reader.BaseStream.Position = Dicts.DMAData[ROMVersion] + Marshal.SizeOf(typeof(DMADataEntry)) * FileNum;
+                    reader.BaseStream.Position = Dicts.OffsetsData.DMAData[ROMVersion] + Marshal.SizeOf(typeof(DMADataEntry)) * FileNum;
 
                     Out.VROMStart = reader.ReadUInt32();
                     Out.VROMEnd = reader.ReadUInt32();
@@ -57,6 +57,7 @@ namespace OoT_Link_Animation_Editor
                 }
                 catch (Exception)
                 {
+                    return null;
                 }
             }
 

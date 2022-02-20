@@ -68,7 +68,7 @@ namespace OoT_Link_Animation_Editor
 
     public class LinkAnimetionFile
     {
-        public List<Animation> Animations {get; set;}
+        public List<Animation> Animations { get; set; }
 
         public LinkAnimetionFile(List<AnimationHeader> AnimHeaders, byte[] link_animetion)
         {
@@ -80,27 +80,89 @@ namespace OoT_Link_Animation_Editor
                 anims.Add(An);
             });
 
-            Animations = anims.ToList();
+            Animations = anims.OrderBy(x => x.GameplayKeepOffset).ToList();
+        }
+
+        public byte[][] GetByteData(DMADataEntry? LinkAnimationDMA)
+        {
+            List<byte> Headers = new List<byte>();
+            List<byte> AnimationData = new List<byte>();
+
+            int Offset = 0;
+
+            foreach (var anm in Animations)
+            {
+                List<byte> Header = new List<byte>();
+
+                Header.AddRange(Program.BEConverter.GetBytes((UInt16)anm.Frames.Count));
+                Header.AddRange(Program.BEConverter.GetBytes((UInt16)0));
+                Header.Add(7);
+
+                byte[] tOffs = Program.BEConverter.GetBytes(Offset);
+
+                Header.Add(tOffs[1]);
+                Header.Add(tOffs[2]);
+                Header.Add(tOffs[3]);
+
+                Headers.AddRange(Header);
+
+                List<byte> Anim = new List<byte>();
+
+                foreach (var Frame in anm.Frames)
+                {
+                    Anim.AddRange(Frame.Translation.ToBytes());
+
+                    foreach (var Rot in Frame.Rotations)
+                        Anim.AddRange(Rot.ToBytes());
+
+                    Anim.Add(Frame.Pad);
+                    Anim.Add(Frame.Texture);
+                }
+
+                AnimationData.AddRange(Anim);
+                Offset += Anim.Count;
+            }
+
+            int Size = Dicts.OffsetsData.MaxLinkAnimetionFileSize;
+
+            if (LinkAnimationDMA != null)
+                Size = (int)(((DMADataEntry)LinkAnimationDMA).VROMEnd - ((DMADataEntry)LinkAnimationDMA).VROMStart);
+
+            Helpers.PadUntilSize(AnimationData, Size);
+
+            return new byte[][] { Headers.ToArray(), AnimationData.ToArray() };
         }
 
     }
 
     public class Animation
     {
-        public UInt16 gKOffs { get; set; }
+        public UInt16 GameplayKeepOffset { get; set; }
         public List<AnimationFrame> Frames { get; set; }
 
         public Animation(AnimationHeader aH, byte[] link_animetion)
         {
-            gKOffs = aH.GameplayKeepOffset;
+            GameplayKeepOffset = aH.GameplayKeepOffset;
 
-            byte[] Bytes = link_animetion.Skip(aH.GameplayKeepOffset).Take(132 * aH.FrameCount).ToArray();
+            byte[] Bytes = link_animetion.Skip((int)aH.Offset).Take(134 * aH.FrameCount).ToArray();
 
             Frames = new List<AnimationFrame>();
 
-            for (int i = 0; i < 132 * aH.FrameCount; i += 132)
+            for (int i = 0; i < 134 * aH.FrameCount; i += 134)
             {
-                AnimationFrame af = new AnimationFrame(Bytes.Skip(i).Take(132).ToArray());
+                AnimationFrame af = new AnimationFrame(Bytes.Skip(i).Take(134).ToArray());
+                Frames.Add(af);
+            }
+        }
+
+        public Animation(UInt16 _GameplayKeepOffset, byte[] AnimationBytes)
+        {
+            GameplayKeepOffset = _GameplayKeepOffset;
+            Frames = new List<AnimationFrame>();
+
+            for (int i = 0; i < AnimationBytes.Length; i += 134)
+            {
+                AnimationFrame af = new AnimationFrame(AnimationBytes.Skip(i).Take(134).ToArray());
                 Frames.Add(af);
             }
         }
@@ -111,11 +173,11 @@ namespace OoT_Link_Animation_Editor
         public Vec3s Translation { get; set; }
         public List<Vec3us> Rotations { get; set; }
 
+        public byte Pad { get; set; }
+        public byte Texture { get; set; }
+
         public AnimationFrame(byte[] Bytes)
         {
-            if (Bytes.Length != 132 )
-                throw new Exception("Malformed animation frame");
-
             Translation = new Vec3s(Bytes.Take(6).ToArray());
             Rotations = new List<Vec3us>();
 
@@ -124,55 +186,74 @@ namespace OoT_Link_Animation_Editor
                 Vec3us Rot = new Vec3us(Bytes.Skip(i).Take(6).ToArray());
                 Rotations.Add(Rot);
             }
+
+            Pad = Bytes[132];
+            Texture = Bytes[133];
         }
     }
 
     public class Vec3s
     {
-        public Int16 x { get; set; }
-        public Int16 y { get; set; }
-        public Int16 z { get; set; }
+        public Int16 X { get; set; }
+        public Int16 Y { get; set; }
+        public Int16 Z { get; set; }
 
         public Vec3s(Int16 _x, Int16 _y, Int16 _z)
         {
-            x = _x;
-            y = _y;
-            z = _z;
+            X = _x;
+            Y = _y;
+            Z = _z;
         }
 
         public Vec3s(byte[] Bytes)
         {
-            if (Bytes.Length != 6)
-                throw new Exception("Wrong bytecount creating Vec3s");
+            X = Program.BEConverter.ToInt16(Bytes, 0);
+            Y = Program.BEConverter.ToInt16(Bytes, 2);
+            Z = Program.BEConverter.ToInt16(Bytes, 4);
+        }
 
-            x = Program.BEConverter.ToInt16(Bytes, 0);
-            y = Program.BEConverter.ToInt16(Bytes, 2);
-            z = Program.BEConverter.ToInt16(Bytes, 4);
+        public List<byte> ToBytes()
+        {
+            List<byte> Out = new List<byte>();
+
+            Out.AddRange(Program.BEConverter.GetBytes((Int16)X));
+            Out.AddRange(Program.BEConverter.GetBytes((Int16)Y));
+            Out.AddRange(Program.BEConverter.GetBytes((Int16)Z));
+
+            return Out;
         }
 
     }
 
     public class Vec3us
     {
-        public UInt16 x { get; set; }
-        public UInt16 y { get; set; }
-        public UInt16 z { get; set; }
+        public UInt16 X { get; set; }
+        public UInt16 Y { get; set; }
+        public UInt16 Z { get; set; }
 
         public Vec3us(UInt16 _x, UInt16 _y, UInt16 _z)
         {
-            x = _x;
-            y = _y;
-            z = _z;
+            X = _x;
+            Y = _y;
+            Z = _z;
         }
 
         public Vec3us(byte[] Bytes)
         {
-            if (Bytes.Length != 6)
-                throw new Exception("Wrong bytecount creating Vec3us");
+            X = Program.BEConverter.ToUInt16(Bytes, 0);
+            Y = Program.BEConverter.ToUInt16(Bytes, 2);
+            Z = Program.BEConverter.ToUInt16(Bytes, 4);
+        }
 
-            x = Program.BEConverter.ToUInt16(Bytes, 0);
-            y = Program.BEConverter.ToUInt16(Bytes, 2);
-            z = Program.BEConverter.ToUInt16(Bytes, 4);
+        public List<byte> ToBytes()
+        {
+            List<byte> Out = new List<byte>();
+
+            Out.AddRange(Program.BEConverter.GetBytes((UInt16)X));
+            Out.AddRange(Program.BEConverter.GetBytes((UInt16)Y));
+            Out.AddRange(Program.BEConverter.GetBytes((UInt16)Z));
+
+            return Out;
         }
 
     }

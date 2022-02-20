@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -7,42 +8,54 @@ namespace OoT_Link_Animation_Editor
 {
     public static class Dicts
     {
-        public static int FirstAnimationEntry = 0x2310;
-        public static int LastAnimationEntry = 0x34F0;
+        public static DataJSON OffsetsData;
 
-        public static Dictionary<Enums.ROMVer, string> BuildDates = new Dictionary<Enums.ROMVer, string>()
+        public static Dictionary<string, int> LinkAnims;
+
+        public static Dictionary<string, int> GetDictionary(string Filename)
         {
-            {Enums.ROMVer.Debug, "03-02-21" },
-            {Enums.ROMVer.N1_0, "98-10-21"},
-        };
+            Dictionary<string, int> Dict = new Dictionary<string, int>();
 
-        public static Dictionary<Enums.ROMVer, UInt32> BuildAddresses = new Dictionary<Enums.ROMVer, UInt32>()
-        {
-            {Enums.ROMVer.Debug, 0x12F50},
-            {Enums.ROMVer.N1_0, 0x740C},
-        };
+            string OffendingRow = "";
 
-        public static Dictionary<Enums.ROMVer, UInt32> DMAData = new Dictionary<Enums.ROMVer, UInt32>()
-        {
-            {Enums.ROMVer.Debug, 0x12F70},
-            {Enums.ROMVer.N1_0, 0x7430},
-            {Enums.ROMVer.N1_1, 0x7430},
-            {Enums.ROMVer.PAL_MQ, 0x7170 },
-            {Enums.ROMVer.ChIQue, 0xB7A0 },
-            {Enums.ROMVer.TaIQue, 0xB240 },
-        };
+            try
+            {
+                string[] RawData = File.ReadAllLines(Filename);
 
-        public static Dictionary<Enums.ROMVer, UInt32> GameplayKeepIDs = new Dictionary<Enums.ROMVer, UInt32>()
-        {
-            {Enums.ROMVer.Debug, 0x01F2},
-            {Enums.ROMVer.N1_0, 0x01F2},
-        };
+                foreach (string Row in RawData)
+                {
+                    OffendingRow = Row;
+                    string[] NameAndID = Row.Split(',');
+                    Dict.Add(NameAndID[1], Convert.ToInt32(NameAndID[0]));
+                }
 
-        public static Dictionary<Enums.ROMVer, UInt32> LinkAnimetionIDs = new Dictionary<Enums.ROMVer, UInt32>()
-        {
-            {Enums.ROMVer.Debug, 6},
-            {Enums.ROMVer.N1_0, 7},
-        };
-
+                return Dict;
+            }
+            catch (Exception)
+            {
+                System.Windows.Forms.MessageBox.Show($"{Filename} is missing or incorrect. ({OffendingRow})");
+                return Dict;
+            }
+        }
     }
+
+    public class DataJSON
+    {
+        public int FirstAnimationEntry;
+
+        public int LastAnimationEntry;
+
+        public int MaxLinkAnimetionFileSize;
+
+        public Dictionary<Enums.ROMVer, string> BuildDates;
+
+        public Dictionary<Enums.ROMVer, UInt32> BuildAddresses;
+
+        public Dictionary<Enums.ROMVer, UInt32> DMAData;
+
+        public Dictionary<Enums.ROMVer, UInt32> GameplayKeepIDs;
+
+        public Dictionary<Enums.ROMVer, UInt32> LinkAnimetionIDs;
+
+    };
 }

@@ -27,6 +27,7 @@ namespace OoT_Link_Animation_Editor
             ZZRP = 1,
             ZZRPL = 2,
             Direct = 3,
+            None = 255,
         }
     }
 }

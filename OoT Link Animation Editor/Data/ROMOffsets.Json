@@ -1,0 +1,29 @@
+{
+  "FirstAnimationEntry": 8976,
+  "LastAnimationEntry": 13552,
+  "MaxLinkAnimetionFileSize": 2513968,
+  "BuildDates": {
+    "Debug": "03-02-21",
+    "N1_0": "98-10-21"
+  },
+  "BuildAddresses": {
+    "Debug": 77648,
+    "N1_0": 29708
+  },
+  "DMAData": {
+    "Debug": 77680,
+    "N1_0": 29744,
+    "N1_1": 29744,
+    "PAL_MQ": 29040,
+    "ChIQue": 47008,
+    "TaIQue": 45632
+  },
+  "GameplayKeepIDs": {
+    "Debug": 498,
+    "N1_0": 498
+  },
+  "LinkAnimetionIDs": {
+    "Debug": 6,
+    "N1_0": 7
+  }
+}
