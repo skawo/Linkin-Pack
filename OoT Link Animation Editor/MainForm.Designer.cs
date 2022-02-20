@@ -83,49 +83,49 @@ namespace OoT_Link_Animation_Editor
             // openROMToolStripMenuItem
             // 
             this.openROMToolStripMenuItem.Name = "openROMToolStripMenuItem";
-            this.openROMToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openROMToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.openROMToolStripMenuItem.Text = "Open ROM";
             this.openROMToolStripMenuItem.Click += new System.EventHandler(this.OpenROMToolStripMenuItem_Click);
             // 
             // openZZRPToolStripMenuItem
             // 
             this.openZZRPToolStripMenuItem.Name = "openZZRPToolStripMenuItem";
-            this.openZZRPToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openZZRPToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.openZZRPToolStripMenuItem.Text = "Open ZZRP";
             this.openZZRPToolStripMenuItem.Click += new System.EventHandler(this.OpenZZRPToolStripMenuItem_Click);
             // 
             // openZZRPLToolStripMenuItem
             // 
             this.openZZRPLToolStripMenuItem.Name = "openZZRPLToolStripMenuItem";
-            this.openZZRPLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openZZRPLToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.openZZRPLToolStripMenuItem.Text = "Open ZZRPL";
             this.openZZRPLToolStripMenuItem.Click += new System.EventHandler(this.OpenZZRPLToolStripMenuItem_Click);
             // 
             // openIndividualToolStripMenuItem
             // 
             this.openIndividualToolStripMenuItem.Name = "openIndividualToolStripMenuItem";
-            this.openIndividualToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openIndividualToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.openIndividualToolStripMenuItem.Text = "Open individual";
             this.openIndividualToolStripMenuItem.Click += new System.EventHandler(this.OpenIndividualToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.saveAsToolStripMenuItem.Text = "Save As...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
@@ -207,6 +207,7 @@ namespace OoT_Link_Animation_Editor
             | System.Windows.Forms.AnchorStyles.Right)));
             this.PanelEditor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.PanelEditor.Controls.Add(this.ButtonImport);
+            this.PanelEditor.Enabled = false;
             this.PanelEditor.Location = new System.Drawing.Point(433, 27);
             this.PanelEditor.Name = "PanelEditor";
             this.PanelEditor.Size = new System.Drawing.Size(355, 395);
