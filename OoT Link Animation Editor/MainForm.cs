@@ -84,10 +84,7 @@ namespace OoT_Link_Animation_Editor
             if (Dicts.OffsetsData.LinkAnimetionIDs.ContainsKey(ROMVersion))
                 LinkAnimetionDataEntry = ROMOps.GetDMADataEntry(ROMData, ROMVersion, Dicts.OffsetsData.LinkAnimetionIDs[ROMVersion]);
 
-            if (((DMADataEntry)GameplayKeepDataEntry).PROMEnd != 0 || 
-                ((DMADataEntry)GameplayKeepDataEntry).PROMEnd != 0 || 
-                ((DMADataEntry)GameplayKeepDataEntry).VROMStart == 0 || 
-                ((DMADataEntry)GameplayKeepDataEntry).VROMStart == 0)
+            if (GameplayKeepDataEntry == null || LinkAnimetionDataEntry == null)
             {
                 MessageBox.Show("Invalid or unsupported ROM.\nMake sure your ROM is decompressed first.");
                 return false;
