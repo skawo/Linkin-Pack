@@ -46,13 +46,11 @@ namespace OoT_Link_Animation_Editor
             this.AnimationName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FrameCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Status = new System.Windows.Forms.Label();
-            this.PanelEditor = new System.Windows.Forms.Panel();
             this.ButtonImport = new System.Windows.Forms.Button();
             this.txSearch = new System.Windows.Forms.TextBox();
             this.lblSearch = new System.Windows.Forms.Label();
             this.MenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AnimGrid)).BeginInit();
-            this.PanelEditor.SuspendLayout();
             this.SuspendLayout();
             // 
             // MenuStrip
@@ -62,7 +60,7 @@ namespace OoT_Link_Animation_Editor
             this.aboutToolStripMenuItem});
             this.MenuStrip.Location = new System.Drawing.Point(0, 0);
             this.MenuStrip.Name = "MenuStrip";
-            this.MenuStrip.Size = new System.Drawing.Size(800, 24);
+            this.MenuStrip.Size = new System.Drawing.Size(835, 24);
             this.MenuStrip.TabIndex = 0;
             this.MenuStrip.Text = "menuStrip1";
             // 
@@ -158,7 +156,7 @@ namespace OoT_Link_Animation_Editor
             this.AnimGrid.ReadOnly = true;
             this.AnimGrid.RowHeadersVisible = false;
             this.AnimGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.AnimGrid.Size = new System.Drawing.Size(412, 395);
+            this.AnimGrid.Size = new System.Drawing.Size(811, 402);
             this.AnimGrid.TabIndex = 1;
             this.AnimGrid.SelectionChanged += new System.EventHandler(this.AnimationsGrid_SelectionChanged);
             // 
@@ -195,28 +193,16 @@ namespace OoT_Link_Animation_Editor
             // 
             this.Status.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Status.AutoSize = true;
-            this.Status.Location = new System.Drawing.Point(430, 425);
+            this.Status.Location = new System.Drawing.Point(365, 461);
             this.Status.Name = "Status";
             this.Status.Size = new System.Drawing.Size(24, 13);
             this.Status.TabIndex = 2;
             this.Status.Text = "Idle";
             // 
-            // PanelEditor
-            // 
-            this.PanelEditor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.PanelEditor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PanelEditor.Controls.Add(this.ButtonImport);
-            this.PanelEditor.Enabled = false;
-            this.PanelEditor.Location = new System.Drawing.Point(433, 27);
-            this.PanelEditor.Name = "PanelEditor";
-            this.PanelEditor.Size = new System.Drawing.Size(355, 395);
-            this.PanelEditor.TabIndex = 3;
-            // 
             // ButtonImport
             // 
             this.ButtonImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ButtonImport.Location = new System.Drawing.Point(3, 347);
+            this.ButtonImport.Location = new System.Drawing.Point(12, 435);
             this.ButtonImport.Name = "ButtonImport";
             this.ButtonImport.Size = new System.Drawing.Size(347, 43);
             this.ButtonImport.TabIndex = 0;
@@ -228,9 +214,9 @@ namespace OoT_Link_Animation_Editor
             // 
             this.txSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txSearch.Location = new System.Drawing.Point(257, 425);
+            this.txSearch.Location = new System.Drawing.Point(621, 458);
             this.txSearch.Name = "txSearch";
-            this.txSearch.Size = new System.Drawing.Size(167, 20);
+            this.txSearch.Size = new System.Drawing.Size(202, 20);
             this.txSearch.TabIndex = 4;
             this.txSearch.TextChanged += new System.EventHandler(this.TxSearch_TextChanged);
             // 
@@ -239,7 +225,7 @@ namespace OoT_Link_Animation_Editor
             this.lblSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSearch.AutoSize = true;
-            this.lblSearch.Location = new System.Drawing.Point(207, 428);
+            this.lblSearch.Location = new System.Drawing.Point(571, 461);
             this.lblSearch.Name = "lblSearch";
             this.lblSearch.Size = new System.Drawing.Size(44, 13);
             this.lblSearch.TabIndex = 5;
@@ -249,10 +235,10 @@ namespace OoT_Link_Animation_Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(835, 483);
+            this.Controls.Add(this.ButtonImport);
             this.Controls.Add(this.lblSearch);
             this.Controls.Add(this.txSearch);
-            this.Controls.Add(this.PanelEditor);
             this.Controls.Add(this.Status);
             this.Controls.Add(this.AnimGrid);
             this.Controls.Add(this.MenuStrip);
@@ -263,7 +249,6 @@ namespace OoT_Link_Animation_Editor
             this.MenuStrip.ResumeLayout(false);
             this.MenuStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AnimGrid)).EndInit();
-            this.PanelEditor.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -283,7 +268,6 @@ namespace OoT_Link_Animation_Editor
         private System.Windows.Forms.ToolStripMenuItem openIndividualToolStripMenuItem;
         private System.Windows.Forms.DataGridView AnimGrid;
         private System.Windows.Forms.Label Status;
-        private System.Windows.Forms.Panel PanelEditor;
         private System.Windows.Forms.Button ButtonImport;
         private System.Windows.Forms.TextBox txSearch;
         private System.Windows.Forms.Label lblSearch;

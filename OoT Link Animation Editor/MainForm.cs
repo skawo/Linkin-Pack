@@ -75,32 +75,40 @@ namespace OoT_Link_Animation_Editor
 
         private bool GetDataFromROM(string Filename)
         {
-            ROMData = File.ReadAllBytes(Filename);
-            ROMVersion = ROMOps.CheckRomVersion(ROMData);
-
-            if (Dicts.OffsetsData.GameplayKeepIDs.ContainsKey(ROMVersion))
-                GameplayKeepDataEntry = ROMOps.GetDMADataEntry(ROMData, ROMVersion, Dicts.OffsetsData.GameplayKeepIDs[ROMVersion]);
-
-            if (Dicts.OffsetsData.LinkAnimetionIDs.ContainsKey(ROMVersion))
-                LinkAnimetionDataEntry = ROMOps.GetDMADataEntry(ROMData, ROMVersion, Dicts.OffsetsData.LinkAnimetionIDs[ROMVersion]);
-
-            if (GameplayKeepDataEntry == null || LinkAnimetionDataEntry == null)
+            try
             {
-                MessageBox.Show("Invalid or unsupported ROM.\nMake sure your ROM is decompressed first.");
-                return false;
-            }
-            else
-            {
-                GameplayKeepData = ROMOps.ReadFromROM(ROMData, (DMADataEntry)GameplayKeepDataEntry);
-                LinkAnimetionData = ROMOps.ReadFromROM(ROMData, (DMADataEntry)LinkAnimetionDataEntry);
+                ROMData = File.ReadAllBytes(Filename);
+                ROMVersion = ROMOps.CheckRomVersion(ROMData);
 
-                if (GameplayKeepData == null || LinkAnimetionData == null)
+                if (Dicts.OffsetsData.GameplayKeepIDs.ContainsKey(ROMVersion))
+                    GameplayKeepDataEntry = ROMOps.GetDMADataEntry(ROMData, ROMVersion, Dicts.OffsetsData.GameplayKeepIDs[ROMVersion]);
+
+                if (Dicts.OffsetsData.LinkAnimetionIDs.ContainsKey(ROMVersion))
+                    LinkAnimetionDataEntry = ROMOps.GetDMADataEntry(ROMData, ROMVersion, Dicts.OffsetsData.LinkAnimetionIDs[ROMVersion]);
+
+                if (GameplayKeepDataEntry == null || LinkAnimetionDataEntry == null)
                 {
-                    MessageBox.Show("Error reading from ROM.");
+                    MessageBox.Show("Invalid or unsupported ROM.\nMake sure your ROM is decompressed first.");
                     return false;
                 }
+                else
+                {
+                    GameplayKeepData = ROMOps.ReadFromROM(ROMData, (DMADataEntry)GameplayKeepDataEntry);
+                    LinkAnimetionData = ROMOps.ReadFromROM(ROMData, (DMADataEntry)LinkAnimetionDataEntry);
 
-                return true;
+                    if (GameplayKeepData == null || LinkAnimetionData == null)
+                    {
+                        MessageBox.Show("Error reading from ROM.");
+                        return false;
+                    }
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error reading from ROM: " + ex.Message);
+                return false;
             }
         }
 
@@ -116,7 +124,7 @@ namespace OoT_Link_Animation_Editor
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Error reading data: " + ex.Message);
             }
         }
 
@@ -127,11 +135,18 @@ namespace OoT_Link_Animation_Editor
 
             int ID = 0;
 
-            foreach (AnimationHeader aH in AnimHeaders)
+            try
             {
-                string Name = Dicts.LinkAnims.FirstOrDefault(x => x.Value == aH.GameplayKeepOffset).Key;
-                AnimGrid.Rows.Add(new object[] { ID, "0x" + aH.GameplayKeepOffset.ToString("X"), Name, LinkAnimetion.Animations.Find(x => x.GameplayKeepOffset == aH.GameplayKeepOffset).Frames.Count });
-                ID++;
+                foreach (AnimationHeader aH in AnimHeaders)
+                {
+                    string Name = Dicts.LinkAnims.FirstOrDefault(x => x.Value == aH.GameplayKeepOffset).Key;
+                    AnimGrid.Rows.Add(new object[] { ID, "0x" + aH.GameplayKeepOffset.ToString("X"), Name, LinkAnimetion.Animations.Find(x => x.GameplayKeepOffset == aH.GameplayKeepOffset).Frames.Count });
+                    ID++;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error parsing animations: " + ex.Message);
             }
 
             Status.Text = $"Frames left: {AnimationOps.CalculateFramesLeft(LinkAnimetion, LinkAnimetionDataEntry)}";
@@ -211,13 +226,13 @@ namespace OoT_Link_Animation_Editor
                     string zzrplFolder = Path.GetDirectoryName(of.FileName);
 
                     string VanillaFolder = "_vanilla-1.0";
-                    string VanillaROM = "oot-1.0.z64";
+                    string VanillaROM = "oot-1.0-defc.z64";
                     string Filename = "zobj.zobj";
                     string ObjectFolder = "object";
 
                     string[] DirsObject = Directory.GetDirectories(Path.Combine(zzrplFolder, ObjectFolder));
 
-                    if (DirsObject.First(x => Path.GetFileName(x) == "_vanilla-debug") != null)
+                    if (DirsObject.Any(x => Path.GetFileName(x) == "_vanilla-debug"))
                     {
                         VanillaFolder = "_vanilla-debug";
                         VanillaROM = "oot-debug.z64";
@@ -253,6 +268,23 @@ namespace OoT_Link_Animation_Editor
                     ROMFilePath = Path.Combine(zzrplFolder, VanillaROM);
                     GameplayKeepFilePath = gameplayKeepFile;
 
+                    if (!File.Exists(ROMFilePath))
+                    {
+                        OpenFileDialog of2 = new OpenFileDialog
+                        {
+                            Filter = "Decompressed Zelda 64 ROM (*.z64)|*.z64"
+                        };
+
+                        DialogResult DR2 = of2.ShowDialog();
+
+                        if (DR2 == DialogResult.OK)
+                        {
+                            ROMFilePath = of2.FileName;
+                        }
+                        else
+                            return;
+                    }
+
                     if (GetDataFromROM(ROMFilePath))
                     {
                         GameplayKeepData = File.ReadAllBytes(gameplayKeepFile);
@@ -284,6 +316,8 @@ namespace OoT_Link_Animation_Editor
 
             if (DR == DialogResult.OK)
                 GameplayKeepData = File.ReadAllBytes(of.FileName);
+            else
+                return;
 
             of.Filter = "Link Animation File (*.*)|*.*";
 
@@ -291,6 +325,8 @@ namespace OoT_Link_Animation_Editor
 
             if (DR2 == DialogResult.OK)
                 LinkAnimetionData = File.ReadAllBytes(of.FileName);
+            else
+                return;
 
             GetAnimations();
             InsertDataToAnimGrid();
@@ -360,10 +396,10 @@ namespace OoT_Link_Animation_Editor
             }
 
             if (SelectedEntry == null)
-                PanelEditor.Enabled = false;
+                ButtonImport.Enabled = false;
             else
             {
-                PanelEditor.Enabled = true;
+                ButtonImport.Enabled = true;
                 //InsertDataToEditor();
             }
         }
@@ -421,7 +457,7 @@ namespace OoT_Link_Animation_Editor
 
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Link Animation Manager 1.02 for Ocarina of Time\nProgramming by: Skawo, 2022\nThanks to: SageofMirrors, Cloudmodding.");
+            MessageBox.Show("Link Animation Manager 1.03 for Ocarina of Time\nProgramming by: Skawo, 2022\nThanks to: SageofMirrors, Cloudmodding.");
         }
 
         private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
