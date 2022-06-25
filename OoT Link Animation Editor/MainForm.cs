@@ -226,7 +226,7 @@ namespace OoT_Link_Animation_Editor
                     string zzrplFolder = Path.GetDirectoryName(of.FileName);
 
                     string VanillaFolder = "_vanilla-1.0";
-                    string VanillaROM = "oot-1.0-defc.z64";
+                    string VanillaROM = "oot-1.0-dec.z64";
                     string Filename = "zobj.zobj";
                     string ObjectFolder = "object";
 
@@ -295,7 +295,7 @@ namespace OoT_Link_Animation_Editor
                         ROMFilePath = "";
                         saveAsToolStripMenuItem.Visible = false;
                         GameplayKeepFilePath = "";
-                        Status.Visible = false;
+                        Status.Visible = true;
                     }
                 }
                 catch (Exception ex)
