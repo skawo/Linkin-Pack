@@ -7,5 +7,3 @@ This tool is able to change Link animations in the ROMs (Debug and NTSC), ZZRT a
 The tool automatically repoints and recreates the data from scratch, so the limiting factor is the size of the overall file, and not of an individual animation.
 
 The animations can be created by using <a href="https://github.com/sauraen/link-rig">Sauraen's Link rig</a> and exported using <a href="https://github.com/Dragorn421/io_export_objex">Objex2</a> (by checking the EXPORT LINK ANIM BINS) option.
-
-Planned is also an ability to edit the animations within the tool.
