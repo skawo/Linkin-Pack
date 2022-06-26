@@ -570,7 +570,7 @@ namespace OoT_Link_Animation_Editor
 
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Link Animation Manager 1.03 for Ocarina of Time\nProgramming by: Skawo, 2022\nThanks to: SageofMirrors, Cloudmodding.");
+            MessageBox.Show("Link Animation Manager 1.04 for Ocarina of Time\nProgramming by: Skawo, 2022\nThanks to: SageofMirrors, Cloudmodding.");
         }
 
         private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
