@@ -154,6 +154,105 @@ namespace OoT_Link_Animation_Editor
             AnimGrid.ResumeLayout();
         }
 
+        private void openZ64ROMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog of = new OpenFileDialog
+            {
+                Filter = "Z64ROM Config File (*.cfg)|*.cfg"
+            };
+
+            DialogResult DR = of.ShowDialog();
+
+            if (DR == DialogResult.OK)
+            {
+                try
+                {
+                    string cfgFolder = Path.GetDirectoryName(of.FileName);
+                    string[] cfg = File.ReadAllLines(of.FileName);
+                    string vanillaFolderName = ".vanilla";
+
+                    foreach (string s in cfg)
+                    {
+                        string[] setting = s.Split('=');
+
+                        if (setting.Length == 2 && setting[0] == "z_vanilla")
+                            vanillaFolderName = setting[1];
+                    }
+
+                    string staticFolder = Path.Combine(cfgFolder, "rom", "system", "static");
+                    string linkAnimationFileEd = Path.Combine(staticFolder, "link_animation.bin");
+
+                    if (!File.Exists(linkAnimationFileEd))
+                    {
+                        string linkAnimationFile = Path.Combine(staticFolder, vanillaFolderName, "link_animation.bin");
+
+                        if (!File.Exists(linkAnimationFile))
+                        {
+                            System.Windows.Forms.MessageBox.Show("Could not find link_animation.bin");
+                            return;
+                        }
+                        else
+                        {
+                            File.Copy(linkAnimationFile, linkAnimationFileEd);
+                        }
+                    }
+
+                    string objectFolder = Path.Combine(cfgFolder, "rom", "object");
+                    string[] files = Directory.GetDirectories(objectFolder);
+                    string gameplayKeepFileEd = files.FirstOrDefault(x => Path.GetFileName(x).StartsWith("0x0001"));
+
+                    if (gameplayKeepFileEd != null)
+                        gameplayKeepFileEd = Path.Combine(gameplayKeepFileEd, "object.zobj");
+
+                    if (gameplayKeepFileEd == null || !File.Exists(gameplayKeepFileEd))
+                    {
+                        gameplayKeepFileEd = Path.Combine(objectFolder, "0x0001-GamePlay_Global");
+                        Directory.CreateDirectory(gameplayKeepFileEd);
+                        gameplayKeepFileEd = Path.Combine(gameplayKeepFileEd, "object.zobj");
+
+                        string gameplayKeepFile = Path.Combine(objectFolder, vanillaFolderName, "0x0001-GamePlay_Global", "object.zobj");
+
+                        if (!File.Exists(gameplayKeepFile))
+                        {
+                            System.Windows.Forms.MessageBox.Show("Could not find the vanilla 0x0001-GamePlay_Global folder");
+                            return;
+                        }
+                        else
+                        {
+                            File.Copy(gameplayKeepFile, gameplayKeepFileEd);
+                        }
+                    }
+
+                    GameplayKeepData = File.ReadAllBytes(gameplayKeepFileEd);
+                    LinkAnimetionData = File.ReadAllBytes(linkAnimationFileEd);
+                    GameplayKeepFilePath = gameplayKeepFileEd;
+                    LinkAnimetionFilePath = linkAnimationFileEd;
+                    GameplayKeepDataEntry = null;
+                    LinkAnimetionDataEntry = null;
+                    ROMFilePath = "";
+                    saveAsToolStripMenuItem.Visible = false;
+
+                    if (GameplayKeepData == null || LinkAnimetionData == null)
+                    {
+                        MessageBox.Show("Error reading files.");
+                        return;
+                    }
+                    else
+                    {
+                        GetAnimations();
+                        InsertDataToAnimGrid();
+                        OperationMode = Enums.Mode.Z64ROM;
+                        Status.Visible = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+
         private void OpenZZRPToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog of = new OpenFileDialog
@@ -349,6 +448,12 @@ namespace OoT_Link_Animation_Editor
                 {
                     case Enums.Mode.ROM:
                         {
+                            if (AnimationOps.CalculateFramesLeft(LinkAnimetion, LinkAnimetionDataEntry) < 0)
+                            {
+                                MessageBox.Show("The framecount treshhold has been exceeded, so the ROM cannot be saved.");
+                                return;
+                            }
+
                             Array.Copy(NewData[0], 0, ROMData, ((DMADataEntry)GameplayKeepDataEntry).PROMStart + Dicts.OffsetsData.FirstAnimationEntry, NewData[0].Length);
                             Array.Copy(NewData[1], 0, ROMData, ((DMADataEntry)LinkAnimetionDataEntry).PROMStart, NewData[1].Length);
 
@@ -357,6 +462,12 @@ namespace OoT_Link_Animation_Editor
                         }
                     case Enums.Mode.ZZRPL:
                         {
+                            if (AnimationOps.CalculateFramesLeft(LinkAnimetion, LinkAnimetionDataEntry) < 0)
+                            {
+                                MessageBox.Show("The framecount treshhold has been exceeded, so the project cannot be saved.");
+                                return;
+                            }
+
                             Array.Copy(NewData[0], 0, GameplayKeepData, Dicts.OffsetsData.FirstAnimationEntry, NewData[0].Length);
                             Array.Copy(NewData[1], 0, ROMData, ((DMADataEntry)LinkAnimetionDataEntry).PROMStart, NewData[1].Length);
 
@@ -367,6 +478,7 @@ namespace OoT_Link_Animation_Editor
                         }
                     case Enums.Mode.ZZRT:
                     case Enums.Mode.Direct:
+                    case Enums.Mode.Z64ROM:
                         {
                             Array.Copy(NewData[0], 0, GameplayKeepData, Dicts.OffsetsData.FirstAnimationEntry, NewData[0].Length);
 
@@ -421,17 +533,18 @@ namespace OoT_Link_Animation_Editor
                 int NewFrameCount = anm.Frames.Count;
                 int FramesFree = AnimationOps.CalculateFramesLeft(LinkAnimetion, LinkAnimetionDataEntry);
 
-                if (OperationMode != Enums.Mode.ZZRT && (FramesFree - (NewFrameCount - OldFrameCount) < 0))
+                /*
+                if (FramesFree - (NewFrameCount - OldFrameCount) < 0)
                 {
                     MessageBox.Show("The framecount treshhold would be exceeded, and so the animation cannot be imported.");
                     return;
                 }
-                else
-                {
-                    LinkAnimetion.Animations[SelectedIndex] = anm;
-                    AnimGrid.Rows[SelectedIndex].Cells[3].Value = anm.Frames.Count();
-                    Status.Text = $"Frames left: {AnimationOps.CalculateFramesLeft(LinkAnimetion, LinkAnimetionDataEntry)}";
-                }
+                */
+
+                LinkAnimetion.Animations[SelectedIndex] = anm;
+                AnimGrid.Rows[SelectedIndex].Cells[3].Value = anm.Frames.Count();
+                Status.Text = $"Frames left: {AnimationOps.CalculateFramesLeft(LinkAnimetion, LinkAnimetionDataEntry)}";
+
             }
         }
 
@@ -477,5 +590,7 @@ namespace OoT_Link_Animation_Editor
                 SaveToolStripMenuItem_Click(null, null);
             }
         }
+
+
     }
 }

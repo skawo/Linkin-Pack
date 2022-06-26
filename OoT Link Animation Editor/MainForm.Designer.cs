@@ -49,6 +49,7 @@ namespace OoT_Link_Animation_Editor
             this.ButtonImport = new System.Windows.Forms.Button();
             this.txSearch = new System.Windows.Forms.TextBox();
             this.lblSearch = new System.Windows.Forms.Label();
+            this.openZ64ROMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AnimGrid)).BeginInit();
             this.SuspendLayout();
@@ -70,6 +71,7 @@ namespace OoT_Link_Animation_Editor
             this.openROMToolStripMenuItem,
             this.openZZRPToolStripMenuItem,
             this.openZZRPLToolStripMenuItem,
+            this.openZ64ROMToolStripMenuItem,
             this.openIndividualToolStripMenuItem,
             this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem,
@@ -81,49 +83,49 @@ namespace OoT_Link_Animation_Editor
             // openROMToolStripMenuItem
             // 
             this.openROMToolStripMenuItem.Name = "openROMToolStripMenuItem";
-            this.openROMToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.openROMToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.openROMToolStripMenuItem.Text = "Open ROM";
             this.openROMToolStripMenuItem.Click += new System.EventHandler(this.OpenROMToolStripMenuItem_Click);
             // 
             // openZZRPToolStripMenuItem
             // 
             this.openZZRPToolStripMenuItem.Name = "openZZRPToolStripMenuItem";
-            this.openZZRPToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.openZZRPToolStripMenuItem.Text = "Open ZZRP";
+            this.openZZRPToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.openZZRPToolStripMenuItem.Text = "Open ZZRP Project";
             this.openZZRPToolStripMenuItem.Click += new System.EventHandler(this.OpenZZRPToolStripMenuItem_Click);
             // 
             // openZZRPLToolStripMenuItem
             // 
             this.openZZRPLToolStripMenuItem.Name = "openZZRPLToolStripMenuItem";
-            this.openZZRPLToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.openZZRPLToolStripMenuItem.Text = "Open ZZRPL";
+            this.openZZRPLToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.openZZRPLToolStripMenuItem.Text = "Open ZZRPL Project";
             this.openZZRPLToolStripMenuItem.Click += new System.EventHandler(this.OpenZZRPLToolStripMenuItem_Click);
             // 
             // openIndividualToolStripMenuItem
             // 
             this.openIndividualToolStripMenuItem.Name = "openIndividualToolStripMenuItem";
-            this.openIndividualToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.openIndividualToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.openIndividualToolStripMenuItem.Text = "Open individual";
             this.openIndividualToolStripMenuItem.Click += new System.EventHandler(this.OpenIndividualToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.saveAsToolStripMenuItem.Text = "Save As...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
@@ -231,6 +233,13 @@ namespace OoT_Link_Animation_Editor
             this.lblSearch.TabIndex = 5;
             this.lblSearch.Text = "Search:";
             // 
+            // openZ64ROMToolStripMenuItem
+            // 
+            this.openZ64ROMToolStripMenuItem.Name = "openZ64ROMToolStripMenuItem";
+            this.openZ64ROMToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.openZ64ROMToolStripMenuItem.Text = "Open Z64ROM Project";
+            this.openZ64ROMToolStripMenuItem.Click += new System.EventHandler(this.openZ64ROMToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -275,6 +284,7 @@ namespace OoT_Link_Animation_Editor
         private System.Windows.Forms.DataGridViewTextBoxColumn AnmID;
         private System.Windows.Forms.DataGridViewTextBoxColumn AnimationName;
         private System.Windows.Forms.DataGridViewTextBoxColumn FrameCount;
+        private System.Windows.Forms.ToolStripMenuItem openZ64ROMToolStripMenuItem;
     }
 }
 

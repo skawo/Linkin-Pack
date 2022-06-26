@@ -27,6 +27,7 @@ namespace OoT_Link_Animation_Editor
             ZZRT = 1,
             ZZRPL = 2,
             Direct = 3,
+            Z64ROM = 4,
             None = 255,
         }
     }
