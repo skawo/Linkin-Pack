@@ -337,8 +337,14 @@ namespace OoT_Link_Animation_Editor
                         VanillaROM = "oot-debug.z64";
                     }
 
+                    string[] DirsChanged = Directory.GetDirectories(Path.Combine(zzrplFolder, ObjectFolder));
                     string[] DirsVanilla = Directory.GetDirectories(Path.Combine(zzrplFolder, ObjectFolder, VanillaFolder));
-                    string Foldername = (string)Path.GetFileName(DirsVanilla.FirstOrDefault(x => Path.GetFileName(x).StartsWith("1 -")));
+
+
+                    string Foldername = (string)Path.GetFileName(DirsChanged.FirstOrDefault(x => Path.GetFileName(x).StartsWith("1 -")));
+
+                    if (Foldername == null)
+                        Foldername = (string)Path.GetFileName(DirsVanilla.FirstOrDefault(x => Path.GetFileName(x).StartsWith("1 -")));
 
                     if (Foldername == null)
                     {
@@ -390,10 +396,10 @@ namespace OoT_Link_Animation_Editor
                         GetAnimations();
                         InsertDataToAnimGrid();
                         OperationMode = Enums.Mode.ZZRPL;
-                        LinkAnimetionDataEntry = null;
-                        ROMFilePath = "";
+                        //LinkAnimetionDataEntry = null;
+                        //ROMFilePath = "";
                         saveAsToolStripMenuItem.Visible = false;
-                        GameplayKeepFilePath = "";
+                        //GameplayKeepFilePath = "";
                         Status.Visible = true;
                     }
                 }
